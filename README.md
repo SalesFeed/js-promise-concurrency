@@ -18,10 +18,10 @@ Example:
 		}, 2000);
 	})
 	.enqueue((resolve) => {
-    console.log('t3');
+		console.log('t3');
 		resolve();
 	})
 	.enqueue((resolve) => {
-    console.log('t4');
+		console.log('t4');
 		resolve();
 	});
