@@ -1,5 +1,6 @@
 Example:
 
+```
 var tq = new taskq(2);        //max concurrency = 2
 
 tq.enqueue((resolve) => {
@@ -25,3 +26,4 @@ tq.enqueue((resolve) => {
 .ready().then(() => {
   console.log('ready!!!!');
 });
+```
