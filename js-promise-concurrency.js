@@ -28,7 +28,7 @@ Copyright (C) 2020 Richard Keizer, SalesFeed Nederland B.V.
   };
 
   taskq.prototype.enqueue = function(task) {
-    var p = () => {
+    var p = async () => {
       return new Promise((resolve, reject) => {
         task((resolve) => {
           this.resolved++;
