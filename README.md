@@ -3,10 +3,10 @@ JS Promise concurrency
 
 Example:
 
-  var tq = new taskq(2);        //max concurrency = 2
+  var tq = new taskq(2);        //max concurrency = 2\
   
 
-  tq.enqueue((resolve) => {
+  tq.enqueue((resolve) => {\
     setTimeout(() => {
       console.log('t1');
       resolve();
