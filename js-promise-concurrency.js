@@ -19,38 +19,43 @@ Copyright (C) 2020 Richard Keizer, SalesFeed Nederland B.V.
 
 
 
-	var taskq = function(maxconcurrency) {
-		this.task = [];
-		this.index = 0;
-		this.maxconcurrency = maxconcurrency;
-		this.nractive = 0;
-	};
+  var taskq = function(maxconcurrency) {
+    this.task = [];
+    this.index = 0;
+    this.maxconcurrency = maxconcurrency;
+    this.nractive = 0;
+    this.resolved = 0;
+  };
 
-	taskq.prototype.enqueue = function(task) {
-		var p = () => {
-			return new Promise((resolve, reject) => {
-				task(() => {
-					this.nractive--;
-					this.runNext();
-					resolve();
-				});
-			})
-		};
-		this.task.push(p);
-		this.runNext();
-		return this;
-	}
+  taskq.prototype.enqueue = function(task) {
+    var p = () => {
+      return new Promise((resolve, reject) => {
+        task((resolve) => {
+          this.resolved++;
+          this.nractive--;
+          this.runNext();
+        });
+      })
+    };
+    this.task.push(p);
+    this.runNext();
+    return this;
+  }
 
-	taskq.prototype.runNext = function() {
-		if (this.nractive == this.maxconcurrency) return;
-		if (this.task.length == this.index) return;
+  taskq.prototype.runNext = function() {
+    if (this.nractive == this.maxconcurrency) return;
+    if (this.task.length == this.resolved) return this.ready();
+    if (this.task.length == this.index) return;
 
-		this.nractive++;
-		setTimeout(this.task[this.index++], 0);
-		return this;
-	};
+    this.nractive++;
+    this.task[this.index++]();
 
+    return this;
+  };
 
+  taskq.prototype.ready = function() {
+    return new Promise(resolve => this.ready = resolve);
+  }
 
 
 
