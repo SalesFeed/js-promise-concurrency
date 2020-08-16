@@ -1,3 +1,5 @@
+Example:
+
 var tq = new taskq(2);        //max concurrency = 2
 
 tq.enqueue((resolve) => {
